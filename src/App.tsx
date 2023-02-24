@@ -1,8 +1,10 @@
-import React, { Fragment } from 'react';
-import { createGlobalStyle } from 'styled-components';
+import React, { Fragment, useState } from 'react';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import reset from 'styled-reset';
 import './App.css';
 import Router from './Router';
+import { ReactQueryDevtools } from "react-query/devtools"
+import { darkTheme, lightTheme } from './theme';
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Caladea:ital@1&family=Montserrat:ital,wght@0,500;1,200&family=Noto+Sans+KR:wght@100;300;400;500;700&family=Open+Sans:ital,wght@0,300;0,400;0,500;1,600&family=Source+Sans+Pro&display=swap');
@@ -25,10 +27,18 @@ a {
 
 
 function App() {
+  const [isDark, setIsDark] = useState(true)
+  const toggleDark = () => {
+    setIsDark((current) => !current)
+  }
+
   return (
     <Fragment >
-      <GlobalStyle />
-      <Router />
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <Router toggleDark={toggleDark} isDark={isDark} />
+        <ReactQueryDevtools initialIsOpen={true} />
+      </ThemeProvider>
     </Fragment>
   );
 }

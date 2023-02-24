@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import { useQuery } from 'react-query';
 import {
-  BrowserRouter,
   Link,
   Route,
   Switch,
+  useHistory,
   useLocation,
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
 import styled from 'styled-components';
+import { fetchCoin, fetchTickers } from '../api';
 import Chart from './Chart';
 import Price from './Price';
 
@@ -29,15 +34,19 @@ const Header = styled.header`
   align-items: center;
 `;
 const Home = styled.h1`
-  background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   border-radius: 15px;
   margin-bottom: 10px;
   padding: 20px;
-  height: 15vh;
+  height: 5vh;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  font-size: 20px;
+  a {
+    font-weight: 600;
+  }
 `;
 
 const Title = styled.h1`
@@ -65,6 +74,7 @@ const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: ${(props) => props.theme.cardBgColor};
   span:first-child {
     font-size: 12px;
     font-weight: 540;
@@ -88,7 +98,7 @@ const Linkview = styled.span<{ isActive?: boolean }>`
   text-transform: uppercase;
   font-size: 15px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+
   padding: 20px 0px;
   border-radius: 10px;
   color: ${(props) =>
@@ -166,71 +176,78 @@ interface PriceCoinFeth {
     };
   };
 }
+interface CoinProps {
+  isDark: boolean;
+}
 
-export default function Coin() {
-  const [loading, setLoading] = useState(true);
-  const [coin, setCoin] = useState<CoinFetch>();
-  const [priceCoin, setPriceCoin] = useState<PriceCoinFeth>();
+export default function Coin({ isDark }: CoinProps) {
+  const { isLoading: coinLoading, data: coinData } = useQuery<CoinFetch>(
+    'coin',
+    () => fetchCoin(coinId)
+  );
+  const { isLoading: tickersLoading, data: tickersData } =
+    useQuery<PriceCoinFeth>('tickers', () => fetchTickers(coinId));
   const { state } = useLocation<StateLocation>();
   const { coinId } = useParams<RouteParams>();
   const priceMatch = useRouteMatch(`/${coinId}/price`);
   const chartMatch = useRouteMatch(`/${coinId}/chart`);
-  useEffect(() => {
-    (async () => {
-      const response = await fetch(
-        `https://api.coinpaprika.com/v1/coins/${coinId}`
-      );
-      const json = await response.json();
-      const priceData = await (
-        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      ).json();
-      setCoin(json);
-      setPriceCoin(priceData);
-      setLoading(false);
-      console.log(json);
-      console.log(priceData);
-    })();
-  }, []);
+  const history = useHistory();
+  const handleHistory = () => {
+    history.goBack();
+  };
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name
+            ? state.name
+            : coinLoading
+            ? 'Loading...'
+            : coinData?.name}
+        </title>
+      </Helmet>
       <Header>
-        {/* <Title>{state?.name || "Loading..."}</Title> */}
         <Title>
-          {state?.name ? state.name : loading ? 'Loading...' : coin?.name}
+          {state?.name
+            ? state.name
+            : coinLoading
+            ? 'Loading...'
+            : coinData?.name}
         </Title>
       </Header>
-      {loading ? null : (
+      {coinLoading ? null : (
         <Home>
-          <Link to={'/'}>Home</Link>{' '}
+          <Link to={'/'}>Home</Link>
+          <FontAwesomeIcon onClick={handleHistory} icon={faArrowLeft} />
         </Home>
       )}
-      {loading ? (
+      {coinLoading ? (
         <Loading>Loading...</Loading>
       ) : (
         <Overview>
           <OverviewItem>
             <span>RANK:</span>
-            <span>{coin?.rank}</span>
+            <span>{coinData?.rank}</span>
           </OverviewItem>
           <OverviewItem>
             <span>SYSBOL:</span>
-            <span>{coin?.symbol}</span>
+            <span>{coinData?.symbol}</span>
           </OverviewItem>
           <OverviewItem>
             <span>OPEN SOURCE:</span>
-            <span>{coin?.open_source || 'false'}</span>
+            <span>{coinData?.open_source || 'false'}</span>
           </OverviewItem>
         </Overview>
       )}
-      <Description> {coin?.description}</Description>
+      <Description> {coinData?.description}</Description>
       <Overview>
         <OverviewItem>
           <span>TOTAL SUPLY:</span>
-          <span>{priceCoin?.total_supply}</span>
+          <span>{tickersData?.total_supply}</span>
         </OverviewItem>
         <OverviewItem>
           <span>MAX SUPLY:</span>
-          <span>{priceCoin?.max_supply}</span>
+          <span>{tickersData?.max_supply}</span>
         </OverviewItem>
       </Overview>
       <Tabs>
@@ -243,10 +260,10 @@ export default function Coin() {
       </Tabs>
       <Switch>
         <Route path={`/${coinId}/price`}>
-          <Price />
+          <Price coinId={coinId} isDark={isDark} />
         </Route>
         <Route path={`/${coinId}/chart`}>
-          <Chart />
+          <Chart coinId={coinId} isDark={isDark} />
         </Route>
       </Switch>
     </Container>

@@ -3,6 +3,11 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components'
+import { useQuery } from 'react-query';
+import { fetchCoins } from '../api';
+import { Helmet } from "react-helmet"
+
+
 const Container = styled.div`
 background-color:${(props) => props.theme.bgColor};
 padding:0 20px;
@@ -83,38 +88,30 @@ interface CoinFetch {
   is_active: boolean
   type: string
 }
+interface ToggleCoinsProps {
+  toggleDark: () => void
 
-export default function Coins() {
-  const [coins, setCoins] = useState<CoinFetch[]>([])
-  const [loading, setLoading] = useState(true)
-  // useEffect(() => {
-  //   fetch("https://api.coinpaprika.com/v1/coins").then((response) => response.json()).then((data) => setCoins(data))
-  // }, [])
-  // console.log(coins)
-  useEffect(() => {
-    (async () => {
-      const response = await fetch("https://api.coinpaprika.com/v1/coins")
-      const json = await response.json()
-      setCoins(json.slice(0, 20))
-      setLoading(false)
+}
 
-    })()
-  }, [])
+export default function Coins({ toggleDark }: ToggleCoinsProps) {
+  const { isLoading, data } = useQuery<CoinFetch[]>("allCoins", fetchCoins)
   return (
     <Container>
+      <Helmet>
+        <title>Coins</title>
+      </Helmet >
       <Header>
         <Title>Coins</Title>
+        <button onClick={toggleDark}>toggle</button>
       </Header>
-      {/* {coins.map((coin) => <Home><Link to={`${coin.id}`}>Home</Link> </Home>)} */}
-      {loading ? <Home><Link to={"/"}>Home</Link> </Home> : null}
-      {loading ? (<Loading>Loading...</Loading>) : <CoinList>
-        {coins.map((coin) => <Coin key={coin.id} > <Link to={{
+      {isLoading ? <Home><Link to={"/"}>Home</Link> </Home> : null}
+      {isLoading ? (<Loading>Loading...</Loading>) : <CoinList>
+        {data?.slice(0, 100).map((coin) => <Coin key={coin.id} > <Link to={{
           pathname: coin.id,
           state: { name: coin.name }
         }}>
           <CoinWrapper>{coin.name}<CoinImage src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} /> <FontAwesomeIcon icon={faArrowRight} /> </CoinWrapper></Link></Coin>)}
       </CoinList>}
     </Container >
-
   )
 }
