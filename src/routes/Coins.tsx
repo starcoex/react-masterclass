@@ -20,6 +20,9 @@ height: 15vh;
 display:flex;
 justify-content:center;
 align-items:center;
+button{
+
+}
 
 `
 const Home = styled.h1`
