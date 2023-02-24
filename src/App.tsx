@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
-import { GlobalStyleComponent } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 import './App.css';
 import Router from './Router';
@@ -16,18 +15,14 @@ color:${props => props.theme.textColor}
 }
 a {
   text-decoration:none;
+  color:inherit;
 }
 *{
   box-sizing:border-box;
 }
 `
 
-const Container = styled.div`
-background-color:${(props) => props.theme.bgColor};
-`;
-const H1 = styled.h1`
-color:${(props) => props.theme.textColor};
-`
+
 
 function App() {
   return (
