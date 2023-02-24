@@ -80,6 +80,15 @@ width:50px;
 height:50px;
 margin: 0 5px;
 `
+const ToggleBtn = styled.button`
+  width: 50px;
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  background-color: ${(props) => props.theme.bgColor};
+  color:${props => props.theme.textColor};
+  
+`
 
 
 interface CoinFetch {
@@ -105,7 +114,7 @@ export default function Coins({ toggleDark }: ToggleCoinsProps) {
       </Helmet >
       <Header>
         <Title>Coins</Title>
-        <button onClick={toggleDark}>toggle</button>
+        <ToggleBtn onClick={toggleDark}>toggle</ToggleBtn>
       </Header>
       {isLoading ? <Home><Link to={"/"}>Home</Link> </Home> : null}
       {isLoading ? (<Loading>Loading...</Loading>) : <CoinList>
