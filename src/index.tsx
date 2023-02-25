@@ -4,6 +4,7 @@ import './index.css';
 import { Reset } from 'styled-reset';
 import App from './App';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { RecoilRoot } from 'recoil';
 
 
 const root = ReactDOM.createRoot(
@@ -12,9 +13,11 @@ const root = ReactDOM.createRoot(
 // const queryClient = new QueryClient()
 root.render(
   <React.StrictMode>
-    <Reset />
-    <QueryClientProvider client={new QueryClient()}>
-      <App />
-    </QueryClientProvider>
+    <RecoilRoot>
+      <Reset />
+      <QueryClientProvider client={new QueryClient()}>
+        <App />
+      </QueryClientProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );

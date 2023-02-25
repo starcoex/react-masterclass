@@ -6,16 +6,18 @@ import styled from 'styled-components'
 import { useQuery } from 'react-query';
 import { fetchCoins } from '../api';
 import { Helmet } from "react-helmet"
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { isDarkAtom } from '../atoms';
 
 
 const Container = styled.div`
-background-color:${(props) => props.theme.bgColor};
+background-color:${(props) => props.theme.background1};
 padding:0 20px;
 max-width:482px;
 margin: 0 auto;
 `;
 const Header = styled.header`
-color:${(props) => props.theme.textColor};
+color:${(props) => props.theme.text};
 height: 15vh;
 display:flex;
 justify-content:center;
@@ -27,7 +29,7 @@ button{
 `
 const Home = styled.h1`
 background-color:white;
-color:${props => props.theme.bgColor};
+color:${props => props.theme.background1};
 border-radius:15px;
 margin-bottom:10px;
 padding:20px;
@@ -43,7 +45,7 @@ const CoinList = styled.ul`
 
 const Coin = styled.li`
 background-color:white;
-color:${props => props.theme.bgColor};
+color:${props => props.theme.text};
 border-radius:15px;
 margin-bottom:10px;
 padding:20px;
@@ -54,7 +56,7 @@ a{
 &:hover{
   a{
 
-    color:${props => props.theme.accentColor}
+    color:${props => props.theme.boardBorder1}
   }
 }
 `
@@ -66,7 +68,7 @@ align-items:center;
 
 const Title = styled.h1`
 font-size:48px;
-color:${props => props.theme.accentColor};
+color:${props => props.theme.text};
 `
 const Loading = styled.span`
 padding-top:10px;
@@ -85,8 +87,8 @@ const ToggleBtn = styled.button`
   height: 50px;
   border: none;
   cursor: pointer;
-  background-color: ${(props) => props.theme.bgColor};
-  color:${props => props.theme.textColor};
+  background-color: ${(props) => props.theme.background1};
+  color:${props => props.theme.text};
   
 `
 
@@ -101,11 +103,11 @@ interface CoinFetch {
   type: string
 }
 interface ToggleCoinsProps {
-  toggleDark: () => void
-
 }
 
-export default function Coins({ toggleDark }: ToggleCoinsProps) {
+export default function Coins() {
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
   const { isLoading, data } = useQuery<CoinFetch[]>("allCoins", fetchCoins)
   return (
     <Container>
@@ -114,7 +116,7 @@ export default function Coins({ toggleDark }: ToggleCoinsProps) {
       </Helmet >
       <Header>
         <Title>Coins</Title>
-        <ToggleBtn onClick={toggleDark}>toggle</ToggleBtn>
+        <ToggleBtn onClick={toggleDarkAtom}>toggle</ToggleBtn>
       </Header>
       {isLoading ? <Home><Link to={"/"}>Home</Link> </Home> : null}
       {isLoading ? (<Loading>Loading...</Loading>) : <CoinList>

@@ -2,10 +2,12 @@ import React from 'react'
 import { useQuery } from 'react-query'
 import { fetchChart } from '../api'
 import ApexChart from "react-apexcharts"
+import { useRecoilValue } from 'recoil'
+import { isDarkAtom } from '../atoms'
 
 interface ChartProps {
   coinId: string
-  isDark: boolean
+
 }
 interface ChartFetch {
   time_open: number
@@ -19,9 +21,10 @@ interface ChartFetch {
 }
 
 
-export default function Chart({ coinId, isDark }: ChartProps) {
-  const { isLoading, data } = useQuery<ChartFetch[]>("chart", () => fetchChart(coinId))
 
+export default function Chart({ coinId }: ChartProps) {
+  const { isLoading, data } = useQuery<ChartFetch[]>("chart", () => fetchChart(coinId))
+  const isDark = useRecoilValue(isDarkAtom)
   return (
     <div>{isLoading ? "Loading..." : <ApexChart
       type='line'

@@ -21,21 +21,21 @@ interface RouteParams {
   coinId: string;
 }
 const Container = styled.div`
-  background-color: ${(props) => props.theme.bgColor};
+  background-color: ${(props) => props.theme.background1};
   padding: 0 20px;
   max-width: 482px;
   margin: 0 auto;
 `;
 const Header = styled.header`
-  color: ${(props) => props.theme.textColor};
+  color: ${(props) => props.theme.text};
   height: 15vh;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 const Home = styled.h1`
-  background-color: ${(props) => props.theme.bgColor};
-  color: ${(props) => props.theme.textColor};
+  background-color: ${(props) => props.theme.background1};
+  color: ${(props) => props.theme.text};
   border-radius: 15px;
   margin-bottom: 10px;
   padding: 20px;
@@ -51,7 +51,7 @@ const Home = styled.h1`
 
 const Title = styled.h1`
   font-size: 48px;
-  color: ${(props) => props.theme.accentColor};
+  color: ${(props) => props.theme.boardBorder1};
 `;
 const Loading = styled.span`
   padding-top: 10px;
@@ -74,7 +74,7 @@ const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ${(props) => props.theme.cardBgColor};
+  background-color: ${(props) => props.theme.boardBorder1};
   span:first-child {
     font-size: 12px;
     font-weight: 540;
@@ -102,7 +102,7 @@ const Linkview = styled.span<{ isActive?: boolean }>`
   padding: 20px 0px;
   border-radius: 10px;
   color: ${(props) =>
-    props.isActive ? props.theme.accentColor : props.theme.textColor};
+    props.isActive ? props.theme.boardBorder1 : props.theme.text};
   a {
     display: block;
   }
@@ -176,11 +176,9 @@ interface PriceCoinFeth {
     };
   };
 }
-interface CoinProps {
-  isDark: boolean;
-}
+interface CoinProps {}
 
-export default function Coin({ isDark }: CoinProps) {
+export default function Coin() {
   const { isLoading: coinLoading, data: coinData } = useQuery<CoinFetch>(
     'coin',
     () => fetchCoin(coinId)
@@ -260,10 +258,10 @@ export default function Coin({ isDark }: CoinProps) {
       </Tabs>
       <Switch>
         <Route path={`/${coinId}/price`}>
-          <Price coinId={coinId} isDark={isDark} />
+          <Price coinId={coinId} />
         </Route>
         <Route path={`/${coinId}/chart`}>
-          <Chart coinId={coinId} isDark={isDark} />
+          <Chart coinId={coinId} />
         </Route>
       </Switch>
     </Container>

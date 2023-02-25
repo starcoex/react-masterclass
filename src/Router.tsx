@@ -3,20 +3,19 @@ import Coin from './routes/Coin'
 import Coins from './routes/Coins'
 
 interface ToggleRouterProps {
-  toggleDark: () => void
-  isDark: boolean
+
 }
 
 
-export default function Router({ toggleDark, isDark }: ToggleRouterProps) {
+export default function Router() {
   return (
     <BrowserRouter>
       <Switch>
         <Route path="/:coinId" >
-          <Coin isDark={isDark} />
+          <Coin />
         </Route>
         <Route path="/">
-          <Coins toggleDark={toggleDark} />
+          <Coins />
         </Route>
       </Switch>
     </BrowserRouter>
