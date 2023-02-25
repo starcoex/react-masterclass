@@ -1,0 +1,31 @@
+:root {
+  --red: #f5160a;
+  --orange: #e67e22;
+  --yellow: #f5e62d;
+  --green: #27ae60;
+  --blue: #0984e3;
+  --skyBlue: #00a8ff;
+  --navy: #000080;
+  --purple: #841dfa;
+  --mint: #00d2d3;
+  --pink: #e84393;
+  --lighterGray: #dfe6e9;
+  --white: #ffffff;
+  --black: #000000;
+  --gray: #b2bec3;
+  --snow: #dff9fb;
+  --primary: #1b60ff;
+  --lighterGreen: #55efc4;
+  --navbar: #2c3e50;
+}
+// Wrapper 클래스가 'light'일시 var(--theme)와 var(--contrast)의 컬러가 다르게 적용됩니다.
+.lightTheme {
+  --theme: #f2f2f2;
+  --contrast: #000000;
+}
+
+// Wrapper 클래스가 'dark'일시 var(--theme)와 var(--contrast)의 컬러가 다르게 적용됩니다.
+.darkTheme {
+  --theme: #212121;
+  --contrast: #f2f2f2;
+}

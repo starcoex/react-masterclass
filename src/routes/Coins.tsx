@@ -7,17 +7,17 @@ import { useQuery } from 'react-query';
 import { fetchCoins } from '../api';
 import { Helmet } from "react-helmet"
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { isDarkAtom } from '../atoms';
+import { isDarkAtom } from '../recoil/atoms';
 
 
 const Container = styled.div`
-background-color:${(props) => props.theme.background1};
+background-color:${(props) => props.theme.bgColor};
 padding:0 20px;
 max-width:482px;
 margin: 0 auto;
 `;
 const Header = styled.header`
-color:${(props) => props.theme.text};
+color:${(props) => props.theme.accentColor};
 height: 15vh;
 display:flex;
 justify-content:center;
@@ -29,7 +29,7 @@ button{
 `
 const Home = styled.h1`
 background-color:white;
-color:${props => props.theme.background1};
+color:${props => props.theme.bgColor};
 border-radius:15px;
 margin-bottom:10px;
 padding:20px;
@@ -45,7 +45,7 @@ const CoinList = styled.ul`
 
 const Coin = styled.li`
 background-color:white;
-color:${props => props.theme.text};
+color:${props => props.theme.textColor};
 border-radius:15px;
 margin-bottom:10px;
 padding:20px;
@@ -56,7 +56,7 @@ a{
 &:hover{
   a{
 
-    color:${props => props.theme.boardBorder1}
+    color:${props => props.theme.cardColor}
   }
 }
 `
@@ -68,7 +68,7 @@ align-items:center;
 
 const Title = styled.h1`
 font-size:48px;
-color:${props => props.theme.text};
+color:${props => props.theme.textColor};
 `
 const Loading = styled.span`
 padding-top:10px;
@@ -82,15 +82,7 @@ width:50px;
 height:50px;
 margin: 0 5px;
 `
-const ToggleBtn = styled.button`
-  width: 50px;
-  height: 50px;
-  border: none;
-  cursor: pointer;
-  background-color: ${(props) => props.theme.background1};
-  color:${props => props.theme.text};
-  
-`
+
 
 
 interface CoinFetch {
@@ -106,8 +98,7 @@ interface ToggleCoinsProps {
 }
 
 export default function Coins() {
-  const setDarkAtom = useSetRecoilState(isDarkAtom);
-  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
+
   const { isLoading, data } = useQuery<CoinFetch[]>("allCoins", fetchCoins)
   return (
     <Container>
@@ -116,7 +107,7 @@ export default function Coins() {
       </Helmet >
       <Header>
         <Title>Coins</Title>
-        <ToggleBtn onClick={toggleDarkAtom}>toggle</ToggleBtn>
+
       </Header>
       {isLoading ? <Home><Link to={"/"}>Home</Link> </Home> : null}
       {isLoading ? (<Loading>Loading...</Loading>) : <CoinList>

@@ -21,21 +21,21 @@ interface RouteParams {
   coinId: string;
 }
 const Container = styled.div`
-  background-color: ${(props) => props.theme.background1};
+  background-color: ${(props) => props.theme.bgColor};
   padding: 0 20px;
   max-width: 482px;
   margin: 0 auto;
 `;
 const Header = styled.header`
-  color: ${(props) => props.theme.text};
+  color: ${(props) => props.theme.textColor};
   height: 15vh;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 const Home = styled.h1`
-  background-color: ${(props) => props.theme.background1};
-  color: ${(props) => props.theme.text};
+  background-color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor};
   border-radius: 15px;
   margin-bottom: 10px;
   padding: 20px;
@@ -51,7 +51,7 @@ const Home = styled.h1`
 
 const Title = styled.h1`
   font-size: 48px;
-  color: ${(props) => props.theme.boardBorder1};
+  color: ${(props) => props.theme.textColor};
 `;
 const Loading = styled.span`
   padding-top: 10px;
@@ -74,7 +74,7 @@ const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ${(props) => props.theme.boardBorder1};
+  background-color: ${(props) => props.theme.cardColor};
   span:first-child {
     font-size: 12px;
     font-weight: 540;
@@ -102,7 +102,7 @@ const Linkview = styled.span<{ isActive?: boolean }>`
   padding: 20px 0px;
   border-radius: 10px;
   color: ${(props) =>
-    props.isActive ? props.theme.boardBorder1 : props.theme.text};
+    props.isActive ? props.theme.cardColor : props.theme.textColor};
   a {
     display: block;
   }
@@ -143,7 +143,7 @@ interface CoinFetch {
   first_data_at: string;
   last_data_at: string;
 }
-interface PriceCoinFeth {
+export interface PriceCoinFeth {
   id: string;
   name: string;
   symbol: string;

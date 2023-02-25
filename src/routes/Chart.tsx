@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { fetchChart } from '../api'
 import ApexChart from "react-apexcharts"
 import { useRecoilValue } from 'recoil'
-import { isDarkAtom } from '../atoms'
+import { isDarkAtom } from '../recoil/atoms'
 
 interface ChartProps {
   coinId: string

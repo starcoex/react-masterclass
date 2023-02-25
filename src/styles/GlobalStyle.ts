@@ -6,9 +6,9 @@ const GlobalStyle = createGlobalStyle`
 ${reset}
 body{
   font-family: 'Montserrat', sans-serif;
-  background: ${({ theme }) => theme.background1};
-  color: ${({ theme }) => theme.text};
-  transition: background 0.2s ease-in, color 0.2s ease-in;
+ background-color: ${(props) => props.theme.bgColor};
+	color: ${(props) => props.theme.textColor};
+	transition: background-color 0.3s, color 0.3s;
 }
 a {
   text-decoration:none;
